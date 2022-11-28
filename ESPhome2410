@@ -99,3 +99,4 @@ binary_sensor:
     pin: D5 #ld2410原本D7
     name: "studyroom presence"      #自行修改實體名稱，盡量不要中文，ESPhome支援度低
     device_class: motion 
+
