@@ -1,14 +1,14 @@
 external_components:
   - source: github://oxan/esphome-stream-server
 
-
 substitutions:
-  devicename: studyroom           #改跟name一樣
-  upper_devicename: "studyroom"   # ""內改跟name一樣
+  devicename: ld2410           #改跟name一樣
+  upper_devicename: "ld2410"   # ""內改跟name一樣
   tcp_port: "8880"
 
 esphome:
   name: $devicename
+
 
 stream_server:
    uart_id: uart_bus
@@ -36,13 +36,13 @@ ota:
   password: "6490309c2967b254ba2cc4580d284e5e"
 
 wifi:
-  ssid: "wifi帳號"          #自行修改要連線的wifi帳號
-  password: "wifi密碼"      #自行修改要連線的wifi密碼
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "studyroom"
-    password: "S7V6WbTWuf1W"
+  ap: {}
+    # ssid: "studyroom"
+    # password: "S7V6WbTWuf1W"
 
 captive_portal:
 
@@ -55,14 +55,20 @@ i2c:
 web_server:
 
 uart:
-  id: uart_bus
-  tx_pin: 1
-  rx_pin: 3
-  baud_rate: 256000
-  
-
+  - id: uart_bus
+    tx_pin: 1
+    rx_pin: 3
+    baud_rate: 256000
+  - id: uart_air
+    rx_pin: D7 #IKEA pm1006原本D2
+    baud_rate: 9600
 
 sensor:
+  - platform: pm1006
+    uart_id: uart_air
+    pm_2_5:
+      name: "PM2.5 sensor"
+
   - platform: bh1750
     name: "studyroom illuminance"         #自行修改實體名稱，盡量不要中文，ESPhome支援度低
     address: 0x23
@@ -90,9 +96,6 @@ binary_sensor:
     name: "studyroom motion"       #自行修改實體名稱，盡量不要中文，ESPhome支援度低
     device_class: motion
   - platform: gpio
-    pin: D7
+    pin: D5 #ld2410原本D7
     name: "studyroom presence"      #自行修改實體名稱，盡量不要中文，ESPhome支援度低
-    device_class: motion
-    
-
-        
+    device_class: motion 
